@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Search Engine</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="api.js"></script>
+</head>
+<body style="background-color: whitesmoke;">
+    <header>
+        <form class="search-container" onsubmit="return false;">
+            <input class="search-field" type="text" id="search" placeholder="Search for books">
+            <button class="search-button" type="submit" onclick="fetchResults()">SEARCH</button>
+        </form>
+        <div id="bookList" style="margin:auto; margin-top: 50px; margin-bottom: 50px; text-align: center; visibility: hidden;">Book List</div>
+    </header>
+
+    <main id="main">
+        
+    </main>
+
+    <footer>
+
+    </footer>
+</body>
+</html>

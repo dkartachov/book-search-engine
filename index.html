@@ -8,13 +8,13 @@
     <link rel="stylesheet" href="style.css">
     <script src="api.js"></script>
 </head>
-<body style="background-color: whitesmoke;">
+<body style="background-color: whitesmoke; font-family: Arial, Helvetica, sans-serif;">
     <header>
         <form class="search-container" onsubmit="return false;">
             <input class="search-field" type="text" id="search" placeholder="Search for books">
             <button class="search-button" type="submit" onclick="fetchResults()">SEARCH</button>
         </form>
-        <div id="bookList" style="margin:auto; margin-top: 50px; margin-bottom: 50px; text-align: center; visibility: hidden;">Book List</div>
+        <div id="bookList" class="book-list">Book List</div>
     </header>
 
     <main id="main">

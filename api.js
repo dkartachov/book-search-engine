@@ -22,64 +22,114 @@ async function fetchResults() {
     const isbns = await getISBN(works);
     const books = await getBooks(isbns);
 
-    console.log(books);
-
     document.getElementById('bookList').style.visibility = 'visible';
 
+    createBookCards(books);
+}
+
+function createBookCards(books) {
     let bookRow;
 
     books.forEach((book, index) => {
         if (index % 3 === 0) {
-            bookRow = document.createElement('div');
-            bookRow.className = 'row';
+            // bookRow = document.createElement('div');
+            // bookRow.className = 'row';
+            bookRow = createElement('div', {
+                className: 'row'
+            });
 
             document.getElementById('main').appendChild(bookRow);
         }
 
-        let bookCol = document.createElement('div');
-        bookCol.className = 'column';
+        let bookCol = createElement('div', {
+            className: 'column'
+        });
 
         bookRow.appendChild(bookCol);
 
-        let bookCard = document.createElement('div');
-        bookCard.className = 'book-card';
+        let bookCard = createElement('div', {
+            className: 'book-card'
+        });
 
         bookCol.appendChild(bookCard);
 
-        // book container
-        let bookContainer = document.createElement('a');
-        bookContainer.href = book.url;
-        bookContainer.target = 'blank';
-        css(bookContainer, {
-            'margin-bottom': '10px'
-        })
+        // card container
+        let bookContainer = createElement('a', {
+            href: book.url,
+            target: 'blank'
+        });
 
         bookCard.appendChild(bookContainer);
 
-        // book cover
-        let bookCover = document.createElement('img');
-        bookCover.src = book.covers?.large || 'https://bookstoreromanceday.org/wp-content/uploads/2020/08/book-cover-placeholder.png',
-
-        css(bookCover, {
-            'width': '100%',
-            'height': '100%'
+        // cover
+        let bookCover = createElement('img', {
+            src: book.covers?.large || 'https://bookstoreromanceday.org/wp-content/uploads/2020/08/book-cover-placeholder.png',
+            className: 'book-cover'
         });
 
         bookContainer.appendChild(bookCover);
 
-        // add book title
-        let bookTitle = document.createElement('div');
-        bookTitle.className = 'book-title';
-        bookTitle.textContent = book.title;
+        // details container
+        let detailsContainer = createElement('div', {
+            className: 'book-details'
+        });
 
-        bookCard.appendChild(bookTitle);
+        bookCard.appendChild(detailsContainer);
 
-        // add book author
-        let author = document.createElement('div');
-        author.textContent = `Authors: ${book.authors[0]}`;
+        // book title
+        let bookTitle = createElement('div', {
+            textContent: book.title,
+            className: 'book-title'
+        });
 
-        bookCard.appendChild(author);
+        detailsContainer.appendChild(bookTitle);
+
+        // author
+        let authorLine = createElement('div', {});
+
+        bookCard.appendChild(authorLine);
+
+        let authorLeft = createElement('div', {
+            textContent: 'Authors:',
+            className: 'book-details-left'
+        });
+
+        authorLine.appendChild(authorLeft);
+
+        // publishers
+        let publishersLine = createElement('div', {});
+
+        bookCard.appendChild(publishersLine);
+
+        let publishersLeft = createElement('div', {
+            textContent: 'Publishers:',
+            className: 'book-details-left'
+        });
+
+        publishersLine.appendChild(publishersLeft);
+
+        // subjects
+        let subjectsLine = createElement('div', {});
+
+        bookCard.appendChild(subjectsLine);
+
+        let subjectsLeft = createElement('div', {
+            textContent: 'Subjects:',
+            className: 'book-details-left'
+        });
+
+        subjectsLine.appendChild(subjectsLeft);
     })
+}
+
+function createElement(tag, params) {
+    let element = document.createElement(tag);
+
+    for (let param in params) {
+        element[param] = params[param];
+    }
+
+    return element;
 }
 
 function css(element, params) {
@@ -151,8 +201,12 @@ async function getBooks(isbns) {
 
         let data = await res.json();
         let book = data[`ISBN:${isbn}`];
-        console.log(book);
+        
         if (book) {
+            if (!book.title || !book.authors || !book.cover) {
+                return;
+            }
+
             let title = book.title;
             let authors = book.authors?.map(author => {
                 return author.name;
@@ -164,16 +218,14 @@ async function getBooks(isbns) {
             let url = book.url;
             let covers = book.cover;
 
-            books.push(
-                {
-                    title,
-                    authors,
-                    publishers,
-                    subjects,
-                    url,
-                    covers
-                }
-            );
+            books.push({
+                title,
+                authors,
+                publishers,
+                subjects,
+                url,
+                covers
+            });
         }
     }));
 

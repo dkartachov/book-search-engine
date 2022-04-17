@@ -96,6 +96,15 @@ function createBookCards(books) {
 
         authorLine.appendChild(authorLeft);
 
+        book.authors.forEach(author => {
+            let authorRight = createElement('div', {
+                textContent: author,
+                className: 'book-details-right'
+            });
+
+            authorLine.appendChild(authorRight);
+        });
+
         // publishers
         let publishersLine = createElement('div', {});
 
@@ -108,6 +117,15 @@ function createBookCards(books) {
 
         publishersLine.appendChild(publishersLeft);
 
+        book.publishers.forEach(publisher => {
+            let publisherRight = createElement('div', {
+                textContent: publisher,
+                className: 'book-details-right'
+            });
+
+            publishersLine.appendChild(publisherRight);
+        });
+
         // subjects
         let subjectsLine = createElement('div', {});
 
@@ -119,6 +137,18 @@ function createBookCards(books) {
         });
 
         subjectsLine.appendChild(subjectsLeft);
+
+        console.log(book.subjects);
+        book.subjects.forEach((subject, index) => {
+            if (index > 9) return;
+            
+            let subjectRight = createElement('div', {
+                textContent: subject.name,
+                className: 'book-details-right'
+            })
+
+            subjectsLine.appendChild(subjectRight);
+        });
     })
 }
 

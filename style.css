@@ -68,10 +68,16 @@
 }
 
 .book-details-left {
+    display: inline-block;
     padding: 10px;
     font-weight: bold;
     font-style: italic;
     color: grey;
+}
+
+.book-details-right {
+    display: inline-block;
+    padding: 10px;
 }
 
 @media screen and (max-width: 800px) {

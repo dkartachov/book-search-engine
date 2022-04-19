@@ -10,7 +10,9 @@ async function fetchResults() {
 
     if (!params) return;
 
-    console.log("Searching...");
+    let bookList = document.getElementById('bookList');
+    bookList.style.visibility = 'visible';
+    bookList.textContent = 'Searching...';
 
     const works = await getSearchResults(params);
 
@@ -22,7 +24,7 @@ async function fetchResults() {
     const isbns = await getISBN(works);
     const books = await getBooks(isbns);
 
-    document.getElementById('bookList').style.visibility = 'visible';
+    bookList.textContent = 'Book List';
 
     createBookCards(books);
 }
@@ -32,8 +34,6 @@ function createBookCards(books) {
 
     books.forEach((book, index) => {
         if (index % 3 === 0) {
-            // bookRow = document.createElement('div');
-            // bookRow.className = 'row';
             bookRow = createElement('div', {
                 className: 'row'
             });
@@ -54,12 +54,12 @@ function createBookCards(books) {
         bookCol.appendChild(bookCard);
 
         // card container
-        let bookContainer = createElement('a', {
+        let cardContainer = createElement('a', {
             href: book.url,
             target: 'blank'
         });
 
-        bookCard.appendChild(bookContainer);
+        bookCard.appendChild(cardContainer);
 
         // cover
         let bookCover = createElement('img', {
@@ -67,7 +67,7 @@ function createBookCards(books) {
             className: 'book-cover'
         });
 
-        bookContainer.appendChild(bookCover);
+        cardContainer.appendChild(bookCover);
 
         // details container
         let detailsContainer = createElement('div', {
@@ -87,7 +87,7 @@ function createBookCards(books) {
         // author
         let authorLine = createElement('div', {});
 
-        bookCard.appendChild(authorLine);
+        detailsContainer.appendChild(authorLine);
 
         let authorLeft = createElement('div', {
             textContent: 'Authors:',
@@ -108,7 +108,7 @@ function createBookCards(books) {
         // publishers
         let publishersLine = createElement('div', {});
 
-        bookCard.appendChild(publishersLine);
+        detailsContainer.appendChild(publishersLine);
 
         let publishersLeft = createElement('div', {
             textContent: 'Publishers:',
@@ -129,7 +129,7 @@ function createBookCards(books) {
         // subjects
         let subjectsLine = createElement('div', {});
 
-        bookCard.appendChild(subjectsLine);
+        detailsContainer.appendChild(subjectsLine);
 
         let subjectsLeft = createElement('div', {
             textContent: 'Subjects:',
@@ -138,13 +138,13 @@ function createBookCards(books) {
 
         subjectsLine.appendChild(subjectsLeft);
 
-        console.log(book.subjects);
         book.subjects.forEach((subject, index) => {
             if (index > 9) return;
             
-            let subjectRight = createElement('div', {
+            let subjectRight = createElement('a', {
                 textContent: subject.name,
-                className: 'book-details-right'
+                href: subject.url,
+                className: 'book-subjects'
             })
 
             subjectsLine.appendChild(subjectRight);
@@ -233,7 +233,7 @@ async function getBooks(isbns) {
         let book = data[`ISBN:${isbn}`];
         
         if (book) {
-            if (!book.title || !book.authors || !book.cover) {
+            if (!book.title || !book.authors || !book.cover || !book.subjects || !book.publishers) {
                 return;
             }
 

@@ -2,6 +2,14 @@ const worksUrl = "https://reststop.randomhouse.com/resources/works/?start=0&max=
 const booksUrl = "https://openlibrary.org/api/books?jscmd=data&format=json&bibkeys=ISBN:";
 let bookEls = [];
 
+document.addEventListener('keydown', (event) => {
+    const key = event.key;
+
+    if (key === 'Enter') {
+        fetchResults();
+    }
+});
+
 async function fetchResults() {
     clearResults();
 
@@ -17,6 +25,7 @@ async function fetchResults() {
     const works = await getSearchResults(params);
 
     if (!works) {
+        clearResults();
         alert("Can't find any books, please enter valid search.");
         return;
     }
@@ -144,6 +153,7 @@ function createBookCards(books) {
             let subjectRight = createElement('a', {
                 textContent: subject.name,
                 href: subject.url,
+                target: 'blank',
                 className: 'book-subjects'
             })
 
